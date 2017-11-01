@@ -9,13 +9,19 @@
     <title>Hielo by TEMPLATED</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
     <link rel="stylesheet" href="css/main.css" />
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
   </head>
   <body class="subpage">
 
     <!-- Header -->
       <header id="header">
-        <div class="logo"><a href="index">Hielo <span>by TEMPLATED</span></a></div>
+        <div class="logo"><a href="/">HecHorta <span>web app</span></a></div>
         <a href="#menu">Menu</a>
       </header>
 
@@ -32,9 +38,80 @@
       <section id="One" class="wrapper style3">
         <div class="inner">
           <header class="align-center">
-            <p>Eleifend vitae urna</p>
-            <h2>Generic Page Template</h2>
+            <p>Dados em tempo real da sua Horta!</p>
+            <h2>Monitoramento de dados</h2>
           </header>
+        </div>
+      </section>
+
+      <!-- Gráfico -->
+      <section id="two" class="wrapper style2">
+        <div class="inner">
+          <div class="box">
+            <div class="content">
+
+              <div class="row">
+                <div class="col-sm-9">
+                  <div id="myfirstchart" style="height: 400px;"></div>
+
+                  <script>
+                    new Morris.Line({
+                      // ID of the element in which to draw the chart.
+                      element: 'myfirstchart',
+                      // Chart data records -- each entry in this array corresponds to a point on
+                      // the chart.
+                      data: [
+                        { year: '2008', value: 20 },
+                        { year: '2009', value: 10 },
+                        { year: '2010', value: 5 },
+                        { year: '2011', value: 5 },
+                        { year: '2012', value: 20 }
+                      ],
+                      // The name of the data record attribute that contains x-values.
+                      xkey: 'year',
+                      // A list of names of data record attributes that contain y-values.
+                      ykeys: ['value'],
+                      // Labels for the ykeys -- will be displayed when you hover over the
+                      // chart.
+                      labels: ['Value']
+                    });
+                  </script>
+                </div>
+                <div class="col-sm-3">
+                  <header class="align-center">
+                    <p>Escolha um cultivo</p>
+                    <br/>
+                  </header>
+
+                  <form>
+                    <div class="4u 12u$(small)">
+                      <input type="radio" id="priority-low" name="priority" checked="">
+                      <label for="priority-low">Jardim</label>
+                    </div>
+
+                    <div class="4u 12u$(small)">
+                      <input type="radio" id="priority-normal" name="priority" checked="">
+                      <label for="priority-normal">Vaso</label>
+                    </div>
+
+                    <select name="planta" id="planta">
+                      <option value>- Planta -</option>
+                      <option value="alface">Alface</option>
+                      <option value="repolho">Repolho</option>
+                      <option value="tomate">Tomate</option>
+                    </select>
+                  </form>
+
+                  <hr/>
+
+                  <div class="info">
+                    <h4>Informações da planta</h4>
+                    <p>----</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -68,7 +145,7 @@
           </ul>
         </div>
         <div class="copyright">
-          &copy; Untitled. All rights reserved.
+          &copy; templatedco. All rights reserved.
         </div>
       </footer>
 
