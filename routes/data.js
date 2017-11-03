@@ -39,4 +39,10 @@ router.get('/', function(req, res) {
   });
 });
 
+router.get('/reset', function(req, res) {
+  db.run("DROP TABLE data");
+  db.run("CREATE TABLE IF NOT EXISTS data (v1 REAL, v2 REAL, v3 REAL, time DATETIME, t DATETIME DEFAULT CURRENT_TIMESTAMP)");
+  res.send('ok');
+});
+
 module.exports = router;
