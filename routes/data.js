@@ -4,17 +4,17 @@ var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('database');
 
 db.serialize(function() {
-  db.run("CREATE TABLE IF NOT EXISTS data (info real)");
+  db.run("CREATE TABLE IF NOT EXISTS data (v1 REAL, v2 REAL, v3 REAL, time DATETIME, t DATETIME DEFAULT CURRENT_TIMESTAMP)");
 });
 
 /* Add new data */
-router.get('/', function(req, res) {
-  console.log(req.query.data);
-  data = JSON.parse(req.query.value);
+router.post('/', function(req, res) {
+  //console.log(req.body);
+  data = req.body.rows;
   db.serialize(function() {
-    var stmt = db.prepare("INSERT INTO data VALUES (?)");
-    data.forEach(function(value, i, arr) {
-      stmt.run(value);
+    var stmt = db.prepare("INSERT INTO data (v1, v2, v3, time) VALUES (?, ?, ?, ?)");
+    data.forEach(function(row, i, arr) {
+      stmt.run([row.v1, row.v2, row.v3, row.time]);
     });
     stmt.finalize();
   });
@@ -22,12 +22,17 @@ router.get('/', function(req, res) {
 });
 
 /* Get old data */
-router.get('/get', function(req, res) {
+router.get('/', function(req, res) {
   data = [];
   db.serialize(function() {
-    db.each("SELECT rowid AS id, info FROM data", function(err, row) {
-      console.log(row.id + ": " + row.info);
-      data.push(row.info);
+    db.each("SELECT * FROM data ORDER BY t DESC LIMIT 100", function(err, row) {
+      //console.log(row);
+      data.push({
+        'time': row.time,
+        'v1': row.v1,
+        'v2': row.v2,
+        'v3': row.v3,
+      });
     }, function() {
       res.send(data);
     });
