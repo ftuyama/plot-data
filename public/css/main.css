@@ -4163,6 +4163,12 @@
 				margin-bottom: 0;
 				color: #FFF;
 				font-weight: 300;
+
+		    text-shadow:
+		    -1px -1px 0 #000,
+		    1px -1px 0 #000,
+		    -1px 1px 0 #000,
+		    1px 1px 0 #000;  
 			}
 
 				.banner > article h2:after {
@@ -4170,13 +4176,19 @@
 				}
 
 			.banner > article p {
-				color: rgba(255, 255, 255, 0.65);
+				color: rgba(255, 255, 255, 0.85);
 				text-transform: uppercase;
-				font-size: 1rem;
+				font-size: 1.3rem;
 				font-weight: 300;
 				margin: 0;
 				padding-bottom: 1.75rem;
 				letter-spacing: .25rem;
+
+		    text-shadow:
+		    -1px -1px 0 #000,
+		    1px -1px 0 #000,
+		    -1px 1px 0 #000,
+		    1px 1px 0 #000;  
 			}
 
 				.banner > article p:after {
@@ -4188,7 +4200,7 @@
 					left: 0;
 					width: 50%;
 					height: 1px;
-					background-color: rgba(255, 255, 255, 0.65);
+					background-color: rgba(255, 255, 255, 0.85);
 				}
 
 			.banner > article a {

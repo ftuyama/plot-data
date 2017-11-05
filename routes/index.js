@@ -7,8 +7,8 @@ router.get('/', function(req, res) {
 });
 
 /* GET home page. */
-router.get('/generic', function(req, res) {
-  res.render('generic', { title: 'Express' });
+router.get('/garden', function(req, res) {
+  res.render('garden', { title: 'Express' });
 });
 
 /* GET home page. */
