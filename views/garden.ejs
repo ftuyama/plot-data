@@ -5,56 +5,56 @@
   Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
 -->
 <html>
-  <head>
-    <title>TecHorta</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/main.css" />
+<head>
+  <title>TecHorta</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="css/bootstrap.min.css" />
+  <link rel="stylesheet" href="css/main.css" />
 
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
-  </head>
-  <body class="subpage">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+</head>
+<body class="subpage">
 
-    <!-- Header -->
-      <header id="header">
-        <div class="logo"><a href="/">TecHorta <span>web app</span></a></div>
-        <a href="#menu">Menu</a>
+  <!-- Header -->
+  <header id="header">
+    <div class="logo"><a href="/">TecHorta <span>web app</span></a></div>
+    <a href="#menu">Menu</a>
+  </header>
+
+  <!-- Nav -->
+  <nav id="menu">
+    <ul class="links">
+      <li><a href="/">Home</a></li>
+      <li><a href="garden">Horta</a></li>
+    </ul>
+  </nav>
+
+  <!-- One -->
+  <section id="One" class="wrapper style3">
+    <div class="inner">
+      <header class="align-center">
+        <p>Dados em tempo real da sua Horta!</p>
+        <h2>Monitoramento de dados</h2>
       </header>
+    </div>
+  </section>
 
-    <!-- Nav -->
-      <nav id="menu">
-        <ul class="links">
-          <li><a href="/">Home</a></li>
-          <li><a href="garden">Horta</a></li>
-        </ul>
-      </nav>
+  <!-- Gráfico -->
+  <section id="two" class="wrapper style2">
+    <div class="inner">
+      <div class="box">
+        <div class="content">
 
-    <!-- One -->
-      <section id="One" class="wrapper style3">
-        <div class="inner">
-          <header class="align-center">
-            <p>Dados em tempo real da sua Horta!</p>
-            <h2>Monitoramento de dados</h2>
-          </header>
-        </div>
-      </section>
+          <div class="row">
+            <div class="col-sm-12 col-md-9">
+              <div id="realtime" style="height: 400px;"></div>
 
-      <!-- Gráfico -->
-      <section id="two" class="wrapper style2">
-        <div class="inner">
-          <div class="box">
-            <div class="content">
-
-              <div class="row">
-                <div class="col-sm-12 col-md-9">
-                  <div id="realtime" style="height: 400px;"></div>
-
-                  <script>
-                    var graph = new Morris.Line({
+              <script>
+              var graph = new Morris.Line({
                       // ID of the element in which to draw the chart.
                       element: 'realtime',
                       // Chart data records -- each entry in this array corresponds to a point on the chart.
@@ -68,80 +68,105 @@
                       labels: ['Umidade do solo', 'Umidade do ar', 'Temperatura', 'Concentração CH4']
                     });
 
-                    fetch_data = function() {
-                      $.get("/data", {},
-                        function(data) {
-                          graph.setData(data);
-                        }
-                      ); 
-                    }
+              fetch_data = function() {
+                $.get("/data", {},
+                  function(data) {
+                    graph.setData(data);
+                  }
+                  ); 
+              }
 
-                    fetch_data();
-                    setInterval(function() { 
-                      fetch_data();
-                    }, 5000);                    
-                  </script>
+              fetch_data();
+              setInterval(function() { 
+                fetch_data();
+              }, 5000);                    
+              </script>
+            </div>
+            <div class="col-sm-12 col-md-3">
+              <br/>
+              <header class="align-center">
+                <p>Escolha um cultivo</p>
+                <br/>
+              </header>
+
+              <form>
+                <div class="4u 12u$(small)">
+                  <input type="radio" id="priority-low" name="priority" checked="">
+                  <label for="priority-low">Jardim</label>
                 </div>
-                <div class="col-sm-12 col-md-3">
-                  <br/>
-                  <header class="align-center">
-                    <p>Escolha um cultivo</p>
-                    <br/>
-                  </header>
 
-                  <form>
-                    <div class="4u 12u$(small)">
-                      <input type="radio" id="priority-low" name="priority" checked="">
-                      <label for="priority-low">Jardim</label>
-                    </div>
-
-                    <div class="4u 12u$(small)">
-                      <input type="radio" id="priority-normal" name="priority" checked="">
-                      <label for="priority-normal">Vaso</label>
-                    </div>
-
-                    <select name="planta" id="planta">
-                      <option value>- Planta -</option>
-                      <option value="alface">Alface</option>
-                      <option value="repolho">Repolho</option>
-                      <option value="tomate">Tomate</option>
-                    </select>
-                  </form>
-
-                  <hr/>
-
-                  <div class="info">
-                    <h4>Informações da planta</h4>
-                    <p>----</p>
-                  </div>
+                <div class="4u 12u$(small)">
+                  <input type="radio" id="priority-normal" name="priority" checked="">
+                  <label for="priority-normal">Vaso</label>
                 </div>
+
+                <select name="planta" id="planta" onchange="showHide(this)">
+                  <option value>- Planta -</option>
+                  <option value="alface">Alface</option>
+                  <option value="repolho">Repolho</option>
+                  <option value="tomate">Tomate</option>
+                </select>
+              </form>
+
+              <hr/>
+
+              <div class="info">
+                <h4>Informações da planta</h4>
+
+                <p id="vegetableInfo">----</p>
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </div>
+  </section>
 
-    <!-- Footer -->
-      <footer id="footer">
-        <div class="container">
-          <ul class="icons">
-            <li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
-            <li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
-            <li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
-            <li><a href="#" class="icon fa-envelope-o"><span class="label">Email</span></a></li>
-          </ul>
-        </div>
-        <div class="copyright">
-          &copy; templatedco. All rights reserved.
-        </div>
-      </footer>
+  <!-- Footer -->
+  <footer id="footer">
+    <div class="container">
+      <ul class="icons">
+        <li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+        <li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+        <li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
+        <li><a href="#" class="icon fa-envelope-o"><span class="label">Email</span></a></li>
+      </ul>
+    </div>
+    <div class="copyright">
+      &copy; templatedco. All rights reserved.
+    </div>
+  </footer>
 
-    <!-- Scripts -->
-      <script src="js/jquery.min.js"></script>
-      <script src="js/jquery.scrollex.min.js"></script>
-      <script src="js/skel.min.js"></script>
-      <script src="js/util.js"></script>
-      <script src="js/main.js"></script>
+  <!-- Scripts -->
+  <script src="js/jquery.min.js"></script>
+  <script src="js/jquery.scrollex.min.js"></script>
+  <script src="js/skel.min.js"></script>
+  <script src="js/util.js"></script>
+  <script src="js/main.js"></script>
 
-  </body>
+</body>
 </html>
+
+<script type="text/javascript">
+function showHide(obj){ 
+  var curSel=obj.options[obj.selectedIndex].value
+
+  switch(curSel)
+  {
+    case 'alface':
+    document.getElementById('vegetableInfo').innerHTML = "A alface é uma planta herbácea rica em nutrientes e clorofila. Tem a função de alcalinizar e desintoxicar — principalmente o fígado. Esta hortaliça constitui uma importante fonte de vitaminas (A, C e niacina) e sais minerais (sais de enxofre, fósforo, ferro, cálcio e silício)."; 
+    break;    
+
+    case 'tomate':
+    document.getElementById('vegetableInfo').innerHTML = "O tomate está associado a índices reduzidos de câncer de pâncreas, cervical e próstata. Ele protege o organismo de infecções bacterianas, assim como de perturbações digestivas e pulmonares. Em cataplasmas ou cru, ele age como desinflamatório, sendo também muito benéfico para a atividade cerebral."; 
+    break;
+
+    case 'repolho':
+    document.getElementById('vegetableInfo').innerHTML = " O repolho tem excelentes propriedades curativas da pele. Quando usado como cataplasma, o repolho é eficaz na cura de erupções cutâneas, como eczema, psoríase, acne, erupções cutâneas, mordidas de insetos, úlceras nas pernas e feridas. Ele ajuda a curar a artrite também. Você pode preparar um cataplasma ralando ou processando algum repolho em um liquidificador.";
+    break;
+
+    default:
+    document.getElementById('vegetableInfo').innerHTML= "----";
+  }
+}  
+</script>
