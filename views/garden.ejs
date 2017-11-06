@@ -68,87 +68,204 @@
                       labels: ['Umidade do solo', 'Umidade do ar', 'Temperatura', 'Concentração CH4']
                     });
 
-              fetch_data = function() {
-                $.get("/data", {},
-                  function(data) {
-                    graph.setData(data);
-                  }
-                  ); 
-              }
+    //           var bar = new ProgressBar.Circle('#progressBar', {
+    //     color: '#FCB03C',
+    //     duration: 3000,
+    //     easing: 'easeInOut'
+    // });
 
-              fetch_data();
-              setInterval(function() { 
-                fetch_data();
-              }, 5000);                    
-              </script>
-            </div>
-            <div class="col-sm-12 col-md-3">
-              <br/>
-              <header class="align-center">
-                <p>Escolha um cultivo</p>
-                <br/>
-              </header>
+resume_bars = function() {
+  var elemGround = document.getElementById("myBarGround");
+  var elemAir = document.getElementById("myBarAir");
+  var elemGas = document.getElementById("myBarGas");
+  var elemTemperature = document.getElementById("myBarTemperature");
 
-              <form>
-                <div class="4u 12u$(small)">
-                  <input type="radio" id="priority-low" name="priority" checked="">
-                  <label for="priority-low">Jardim</label>
-                </div>
+  var multiplierAir = 1;
+  var multiplierGround = 1;
+  var multiplierGas = 1;
+  var multiplierTemperature = 1;
 
-                <div class="4u 12u$(small)">
-                  <input type="radio" id="priority-normal" name="priority" checked="">
-                  <label for="priority-normal">Vaso</label>
-                </div>
+  switch(document.getElementById('planta').value) {
+   case 'repolho':
+   multiplierAir = 0.1;
+   multiplierGround = 0.2;
+   multiplierGas = 0.1;
+   multiplierTemperature = 0.3;
+   break;
 
-                <select name="planta" id="planta" onchange="showHide(this)">
-                  <option value>- Planta -</option>
-                  <option value="alface">Alface</option>
-                  <option value="repolho">Repolho</option>
-                  <option value="tomate">Tomate</option>
-                </select>
-              </form>
+   case 'tomate':
+   multiplierAir = 0.3;
+   multiplierGround = 0.6;
+   multiplierGas = 0.5;
+   multiplierTemperature = 0.2;
+   break;
 
-              <hr/>
+   case 'alface':
+   multiplierAir = 0.8;
+   multiplierGround = 0.5;
+   multiplierGas = 0.1;
+   multiplierTemperature = 0.8;
+   break;
 
-              <div class="info">
-                <h4>Informações da planta</h4>
+   default:
+   multiplierAir = 1;
+   multiplierGround = 1;
+   multiplierGas = 1;
+   multiplierTemperature = 1;
+ }
 
-                <p id="vegetableInfo">----</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+ var width = 100;
+ elemGround.style.width = width * multiplierGround + '%';
+ elemGas.style.width = width * multiplierGas + '%'; 
+ elemAir.style.width = width * multiplierAir + '%'; 
+ elemTemperature.style.width = width * multiplierTemperature + '%';
+ if(width * multiplierTemperature > 60) {
+  elemTemperature.style.backgroundColor = 'red';
+ } else {
+  elemTemperature.style.backgroundColor = 'green';
+  }
+
+ if( width * multiplierGround < 10) {
+  elemGround.style.backgroundColor = 'red';
+ }  else {
+    elemGround.style.backgroundColor = 'green';
+ }
+}
+
+fetch_data = function() {
+  $.get("/data", {},
+    function(data) {
+      graph.setData(data);
+    }
+    ); 
+}
+fetch_data();
+$(window).on('load', function() {
+  resume_bars();
+})
+setInterval(function() { 
+  fetch_data();
+  resume_bars();
+}, 5000);                    
+</script>
+</div>
+<div class="col-sm-12 col-md-3">
+  <br/>
+  <header class="align-center">
+    <p>Escolha um cultivo</p>
+    <br/>
+  </header>
+
+  <form>
+    <div class="4u 12u$(small)">
+      <input type="radio" id="priority-low" name="priority" checked="">
+      <label for="priority-low">Jardim</label>
     </div>
-  </section>
 
-  <!-- Footer -->
-  <footer id="footer">
-    <div class="container">
-      <ul class="icons">
-        <li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
-        <li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
-        <li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
-        <li><a href="#" class="icon fa-envelope-o"><span class="label">Email</span></a></li>
-      </ul>
+    <div class="4u 12u$(small)">
+      <input type="radio" id="priority-normal" name="priority" checked="">
+      <label for="priority-normal">Vaso</label>
     </div>
-    <div class="copyright">
-      &copy; templatedco. All rights reserved.
-    </div>
-  </footer>
 
-  <!-- Scripts -->
-  <script src="js/jquery.min.js"></script>
-  <script src="js/jquery.scrollex.min.js"></script>
-  <script src="js/skel.min.js"></script>
-  <script src="js/util.js"></script>
-  <script src="js/main.js"></script>
+    <select name="planta" id="planta" onchange="showHide(this)">
+      <option value>- Planta -</option>
+      <option value="alface">Alface</option>
+      <option value="repolho">Repolho</option>
+      <option value="tomate">Tomate</option>
+    </select>
+  </form>
+
+  <hr/>
+
+  <div class="info">
+    <h4>Informações da planta</h4>
+
+    <p id="vegetableInfo">----</p>
+  </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<!-- Barras de status -->
+<div class="inner">
+  <div class="box">
+    <div class="content">
+      <h3>Barras de status</h3>
+
+      <div class="row">
+        <div class="col-sm-12 col-md-9">
+          <div id="realtime" style="height: 300px;">
+            <div id="myProgressGround" class="container myProgress">
+              <div class="myBar" id="myBarGround">
+                <img src="images/ground_icon.JPG" data-toggle="tooltip" title="Umidade do solo"/>
+             </div>
+           </div>
+           <br>
+           <div id="myProgressGas" class="container myProgress">
+            <div class="myBar" id="myBarGas">
+             <img src="images/fire_icon.JPG" data-toggle="tooltip" title="Concentração de Metano"/>
+           </div>
+         </div>
+
+         <br>
+         <div id="myProgressAir" class="container myProgress">
+          <div class="myBar" id="myBarAir">
+           <img src="images/air_icon.JPG" data-toggle="tooltip" title="Umidade do ar"/>
+         </div>
+       </div>
+
+
+       <br>
+       <div id="myProgressTemperature" class="container myProgress">
+        <div class="myBar" id="myBarTemperature">
+         <img src="images/temperature_icon.JPG" data-toggle="tooltip" title="Temperatura do ambiente"/>
+       </div>
+     </div>
+
+   </div>
+ </div>
+</div>
+</div>
+</div>
+</div>
+
+
+</section>
+
+<!-- Footer -->
+<footer id="footer">
+  <div class="container">
+    <ul class="icons">
+      <li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+      <li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+      <li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
+      <li><a href="#" class="icon fa-envelope-o"><span class="label">Email</span></a></li>
+    </ul>
+  </div>
+  <div class="copyright">
+    &copy; templatedco. All rights reserved.
+  </div>
+</footer>
+
+<!-- Scripts -->
+
+<script src="js/progressbar.min.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.scrollex.min.js"></script>
+<script src="js/skel.min.js"></script>
+<script src="js/util.js"></script>
+<script src="js/main.js"></script>
 
 </body>
 </html>
 
 <script type="text/javascript">
 function showHide(obj){ 
+  resume_bars();
   var curSel=obj.options[obj.selectedIndex].value
 
   switch(curSel)
@@ -170,3 +287,4 @@ function showHide(obj){
   }
 }  
 </script>
+'
