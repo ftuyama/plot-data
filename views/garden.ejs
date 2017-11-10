@@ -1,290 +1,342 @@
 <!DOCTYPE HTML>
 <!--
-  Hielo by TEMPLATED
-  templated.co @templatedco
-  Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+Hielo by TEMPLATED
+templated.co @templatedco
+Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
 -->
 <html>
-<head>
-  <title>TecHorta</title>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="css/bootstrap.min.css" />
-  <link rel="stylesheet" href="css/main.css" />
+  <head>
+    <title>TecHorta</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+  </head>
+  <body class="subpage">
+    <!-- Header -->
+    <header id="header">
+      <div class="logo"><a href="/">TecHorta <span>web app</span></a></div>
+      <a href="#menu">Menu</a>
+    </header>
+    <!-- Nav -->
+    <nav id="menu">
+      <ul class="links">
+        <li><a href="/">Home</a></li>
+        <li><a href="garden">Horta</a></li>
+      </ul>
+    </nav>
+    <!-- One -->
+    <section id="One" class="wrapper style3">
+      <div class="inner">
+        <header class="align-center">
+          <p>Dados em tempo real da sua Horta!</p>
+          <h2>Monitoramento de dados</h2>
+        </header>
+      </div>
+    </section>
+    <!-- Gráfico -->
+    <section id="two" class="wrapper style2">
+      <div class="inner">
+        <div class="box">
+          <div class="content">
+            <div class="row">
+              <div class="col-sm-12 col-md-9">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <h3>Umidade do Solo</h3>
+                    <div id="realtime_ground" style="height: 200px;"></div>
+                  </div>
+                  <div class="col-sm-6">
+                    <h3>Umidade do Ar</h3>
+                    <div id="realtime_air" style="height: 200px;"></div>
+                  </div>
+                  <div class="col-sm-6">
+                    <h3>Temperatura</h3>
+                    <div id="realtime_gas" style="height: 200px;"></div>
+                  </div>
+                  <div class="col-sm-6">
+                    <h3>Concentração de Metano</h3>
+                    <div id="realtime_temperature" style="height: 200px;"></div>
+                  </div>
+                </div>
+                
+                <script>
+                var graph1 = new Morris.Line({
+                     element: 'realtime_ground',
+                     data: [],
+                     xkey: 'time',
+                     ykeys: ['v1'],
+                     lineColors: ['#0b62a4'],
+                     labels: ['Umidade do solo']
+                 });                
 
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
-</head>
-<body class="subpage">
+                var graph2 = new Morris.Line({
+                     element: 'realtime_air',
+                     data: [],
+                     xkey: 'time',
+                     ykeys: ['v2'],
+                     lineColors: ['#78cccc'],
+                     labels: ['Umidade do ar']
+                 });                
 
-  <!-- Header -->
-  <header id="header">
-    <div class="logo"><a href="/">TecHorta <span>web app</span></a></div>
-    <a href="#menu">Menu</a>
-  </header>
+                 var graph3 = new Morris.Line({
+                     element: 'realtime_gas',
+                     data: [],
+                     xkey: 'time',
+                     ykeys: ['v3'],
+                     lineColors: ['#4a8c4c'],
+                     labels: ['Temperatura']
+                 });                
 
-  <!-- Nav -->
-  <nav id="menu">
-    <ul class="links">
-      <li><a href="/">Home</a></li>
-      <li><a href="garden">Horta</a></li>
-    </ul>
-  </nav>
+                 var graph4 = new Morris.Line({
+                     element: 'realtime_temperature',
+                     data: [],
+                     xkey: 'time',
+                     ykeys: ['v4'],
+                     lineColors: ['#993232'],
+                     labels: ['Concentração CH4']
+                 });
+                 //           var bar = new ProgressBar.Circle('#progressBar', {
+                 //     color: '#FCB03C',
+                 //     duration: 3000,
+                 //     easing: 'easeInOut'
+                 // });
+                 resume_bars = function() {
+                     var elemGround = document.getElementById("myBarGround");
+                     var elemAir = document.getElementById("myBarAir");
+                     var elemGas = document.getElementById("myBarGas");
+                     var elemTemperature = document.getElementById("myBarTemperature");
+                     var multiplierAir = 1;
+                     var multiplierGround = 1;
+                     var multiplierGas = 1;
+                     var multiplierTemperature = 1;
+                     switch (document.getElementById('planta').value) {
+                         case 'repolho':
+                             multiplierAir = 0.1;
+                             multiplierGround = 0.2;
+                             multiplierGas = 0.1;
+                             multiplierTemperature = 0.3;
+                             break;
+                         case 'tomate':
+                             multiplierAir = 0.3;
+                             multiplierGround = 0.6;
+                             multiplierGas = 0.5;
+                             multiplierTemperature = 0.2;
+                             break;
+                         case 'alface':
+                             multiplierAir = 0.8;
+                             multiplierGround = 0.5;
+                             multiplierGas = 0.1;
+                             multiplierTemperature = 0.8;
+                             break;
+                         default:
+                             multiplierAir = 1;
+                             multiplierGround = 1;
+                             multiplierGas = 1;
+                             multiplierTemperature = 1;
+                     }
+                     var width = 100;
+                     elemGround.style.width = width * multiplierGround + '%';
+                     elemGas.style.width = width * multiplierGas + '%';
+                     elemAir.style.width = width * multiplierAir + '%';
+                     elemTemperature.style.width = width * multiplierTemperature + '%';
 
-  <!-- One -->
-  <section id="One" class="wrapper style3">
-    <div class="inner">
-      <header class="align-center">
-        <p>Dados em tempo real da sua Horta!</p>
-        <h2>Monitoramento de dados</h2>
-      </header>
-    </div>
-  </section>
+                     $("#myPerGround").html(width * multiplierGround + '%');
+                     $("#myPerGas").html(width * multiplierGas + '%');
+                     $("#myPerAir").html(width * multiplierAir + '%');
+                     $("#myPerTemperature").html(width * multiplierTemperature + '%');
 
-  <!-- Gráfico -->
-  <section id="two" class="wrapper style2">
-    <div class="inner">
-      <div class="box">
-        <div class="content">
-
-          <div class="row">
-            <div class="col-sm-12 col-md-9">
-              <div id="realtime" style="height: 400px;"></div>
-
-              <script>
-              var graph = new Morris.Line({
-                      // ID of the element in which to draw the chart.
-                      element: 'realtime',
-                      // Chart data records -- each entry in this array corresponds to a point on the chart.
-                      data: [],
-                      // The name of the data record attribute that contains x-values.
-                      xkey: 'time',
-                      // A list of names of data record attributes that contain y-values.
-                      ykeys: ['v1', 'v2', 'v3', 'v4'],
-                      // Labels for the ykeys -- will be displayed when you hover over the
-                      // chart.
-                      labels: ['Umidade do solo', 'Umidade do ar', 'Temperatura', 'Concentração CH4']
-                    });
-
-    //           var bar = new ProgressBar.Circle('#progressBar', {
-    //     color: '#FCB03C',
-    //     duration: 3000,
-    //     easing: 'easeInOut'
-    // });
-
-resume_bars = function() {
-  var elemGround = document.getElementById("myBarGround");
-  var elemAir = document.getElementById("myBarAir");
-  var elemGas = document.getElementById("myBarGas");
-  var elemTemperature = document.getElementById("myBarTemperature");
-
-  var multiplierAir = 1;
-  var multiplierGround = 1;
-  var multiplierGas = 1;
-  var multiplierTemperature = 1;
-
-  switch(document.getElementById('planta').value) {
-   case 'repolho':
-   multiplierAir = 0.1;
-   multiplierGround = 0.2;
-   multiplierGas = 0.1;
-   multiplierTemperature = 0.3;
-   break;
-
-   case 'tomate':
-   multiplierAir = 0.3;
-   multiplierGround = 0.6;
-   multiplierGas = 0.5;
-   multiplierTemperature = 0.2;
-   break;
-
-   case 'alface':
-   multiplierAir = 0.8;
-   multiplierGround = 0.5;
-   multiplierGas = 0.1;
-   multiplierTemperature = 0.8;
-   break;
-
-   default:
-   multiplierAir = 1;
-   multiplierGround = 1;
-   multiplierGas = 1;
-   multiplierTemperature = 1;
- }
-
- var width = 100;
- elemGround.style.width = width * multiplierGround + '%';
- elemGas.style.width = width * multiplierGas + '%'; 
- elemAir.style.width = width * multiplierAir + '%'; 
- elemTemperature.style.width = width * multiplierTemperature + '%';
- if(width * multiplierTemperature > 60) {
-  elemTemperature.style.backgroundColor = 'red';
- } else {
-  elemTemperature.style.backgroundColor = 'green';
-  }
-
- if( width * multiplierGround < 10) {
-  elemGround.style.backgroundColor = 'red';
- }  else {
-    elemGround.style.backgroundColor = 'green';
- }
-}
-
-fetch_data = function() {
-  $.get("/data", {},
-    function(data) {
-      graph.setData(data);
-    }
-    ); 
-}
-fetch_data();
-$(window).on('load', function() {
-  resume_bars();
-})
-setInterval(function() { 
-  fetch_data();
-  resume_bars();
-}, 5000);                    
-</script>
-</div>
-<div class="col-sm-12 col-md-3">
-  <br/>
-  <header class="align-center">
-    <p>Escolha um cultivo</p>
-    <br/>
-  </header>
-
-  <form>
-    <div class="4u 12u$(small)">
-      <input type="radio" id="priority-low" name="priority" checked="">
-      <label for="priority-low">Jardim</label>
-    </div>
-
-    <div class="4u 12u$(small)">
-      <input type="radio" id="priority-normal" name="priority" checked="">
-      <label for="priority-normal">Vaso</label>
-    </div>
-
-    <select name="planta" id="planta" onchange="showHide(this)">
-      <option value>- Planta -</option>
-      <option value="alface">Alface</option>
-      <option value="repolho">Repolho</option>
-      <option value="tomate">Tomate</option>
-    </select>
-  </form>
-
-  <hr/>
-
-  <div class="info">
-    <h4>Informações da planta</h4>
-
-    <p id="vegetableInfo">----</p>
-  </div>
-</div>
-</div>
-</div>
-</div>
-</div>
-
-
-
-<!-- Barras de status -->
-<div class="inner">
-  <div class="box">
-    <div class="content">
-      <h3>Barras de status</h3>
-
-      <div class="row">
-        <div class="col-sm-12 col-md-9">
-          <div id="realtime" style="height: 300px;">
-            <div id="myProgressGround" class="container myProgress">
-              <div class="myBar" id="myBarGround">
-                <img src="images/ground_icon.JPG" data-toggle="tooltip" title="Umidade do solo"/>
-             </div>
-           </div>
-           <br>
-           <div id="myProgressGas" class="container myProgress">
-            <div class="myBar" id="myBarGas">
-             <img src="images/fire_icon.JPG" data-toggle="tooltip" title="Concentração de Metano"/>
-           </div>
-         </div>
-
-         <br>
-         <div id="myProgressAir" class="container myProgress">
-          <div class="myBar" id="myBarAir">
-           <img src="images/air_icon.JPG" data-toggle="tooltip" title="Umidade do ar"/>
-         </div>
-       </div>
-
-
-       <br>
-       <div id="myProgressTemperature" class="container myProgress">
-        <div class="myBar" id="myBarTemperature">
-         <img src="images/temperature_icon.JPG" data-toggle="tooltip" title="Temperatura do ambiente"/>
-       </div>
-     </div>
-
-   </div>
- </div>
-</div>
-</div>
-</div>
-</div>
-
-
-</section>
-
-<!-- Footer -->
-<footer id="footer">
-  <div class="container">
-    <ul class="icons">
-      <li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
-      <li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
-      <li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
-      <li><a href="#" class="icon fa-envelope-o"><span class="label">Email</span></a></li>
-    </ul>
-  </div>
-  <div class="copyright">
-    &copy; templatedco. All rights reserved.
-  </div>
-</footer>
-
-<!-- Scripts -->
-
-<script src="js/progressbar.min.js"></script>
-<script src="js/jquery.min.js"></script>
-<script src="js/jquery.scrollex.min.js"></script>
-<script src="js/skel.min.js"></script>
-<script src="js/util.js"></script>
-<script src="js/main.js"></script>
-
-</body>
+                     if (width * multiplierTemperature > 60) {
+                         elemTemperature.style.backgroundColor = 'red';
+                     } else {
+                         elemTemperature.style.backgroundColor = 'green';
+                     }
+                     if (width * multiplierGround < 10) {
+                         elemGround.style.backgroundColor = 'red';
+                     } else {
+                         elemGround.style.backgroundColor = 'green';
+                     }
+                 }
+                 function getGarden(e) {
+                    $("#planta").html("<option value>- Planta -</option>\
+                      <option value='repolho'>Repolho</option>");
+                    $("#recomendations").attr("src", "");
+                    $("#plant").html("Plantio: -");
+                    $("#harvest").html("Colheita: -");
+                 }
+                 function getVase(e) {
+                    $("#planta").html("<option value>- Planta -</option>\
+                      <option value='alface'>Alface</option>\
+                      <option value='tomate'>Tomate</option>");
+                    $("#recomendations").attr("src", "");
+                    $("#plant").html("Plantio: -");
+                    $("#harvest").html("Colheita: -");
+                 }
+                 fetch_data = function() {
+                     $.get("/data", {},
+                         function(data) {
+                             graph1.setData(data);
+                             graph2.setData(data);
+                             graph3.setData(data);
+                             graph4.setData(data);
+                         }
+                     );
+                 }
+                 fetch_data();
+                 $(window).on('load', function() {
+                     resume_bars();
+                     getVase();
+                 })
+                 setInterval(function() {
+                     fetch_data();
+                     resume_bars();
+                 }, 5000);
+                </script>
+              </div>
+              <div class="col-sm-12 col-md-3">
+                <br/>
+                <header class="align-center">
+                  <p>Escolha um cultivo</p>
+                  <br/>
+                </header>
+                <form>
+                  <div class="4u 12u$(small)">
+                    <input type="radio" id="priority-low" onclick="getGarden(this);" name="priority" checked="">
+                    <label for="priority-low">Jardim</label>
+                  </div>
+                  <div class="4u 12u$(small)">
+                    <input type="radio" id="priority-normal" onclick="getVase(this);" name="priority" checked="">
+                    <label for="priority-normal">Vaso</label>
+                  </div>
+                  <select name="planta" id="planta" onchange="showHide(this)">
+                    <option value>- Planta -</option>
+                    <option value="alface">Alface</option>
+                    <option value="repolho">Repolho</option>
+                    <option value="tomate">Tomate</option>
+                  </select>
+                </form>
+                <hr/>
+                <div class="info">
+                  <h4>Informações da planta</h4>
+                  <p id="vegetableInfo">----</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Barras de status -->
+      <div class="inner">
+        <div class="box">
+          <div class="content">
+            <div class="row" style="margin-bottom:-60px !important;">
+              <div class="col-sm-12 col-md-8">
+                <header class="align-center">
+                  <p>Barra de Status</p>
+                  <br/>
+                </header>
+                <div id="realtime" style="height: 300px;">
+                  <div id="myProgressGround" class="container myProgress">
+                    <div class="myBar" id="myBarGround">
+                      <img src="images/ground_icon.JPG" data-toggle="tooltip" title="Umidade do solo"/>
+                    </div>
+                  </div>
+                  <b id="myPerGround">100%</b>
+                  <br>
+                  <div id="myProgressGas" class="container myProgress">
+                    <div class="myBar" id="myBarGas">
+                      <img src="images/fire_icon.JPG" data-toggle="tooltip" title="Concentração de Metano"/>
+                    </div>
+                  </div>
+                  <b id="myPerGas">100%</b>
+                  <br>
+                  <div id="myProgressAir" class="container myProgress">
+                    <div class="myBar" id="myBarAir">
+                      <img src="images/air_icon.JPG" data-toggle="tooltip" title="Umidade do ar"/>
+                    </div>
+                  </div>
+                  <b id="myPerAir">100%</b>
+                  <br>
+                  <div id="myProgressTemperature" class="container myProgress">
+                    <div class="myBar" id="myBarTemperature">
+                      <img src="images/temperature_icon.JPG" data-toggle="tooltip" title="Temperatura do ambiente"/>
+                    </div>
+                  </div>
+                  <b id="myPerTemperature">100%</b>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-4">
+                <header class="align-center">
+                  <p>Recomendações de Cultivo</p>
+                  <div id="plant">Plantio: -</div>
+                  <div id="harvest">Colheita: -</div>
+                  <br/>
+                  <h4>Plantação Conjunta</h4>
+                  <img id="recomendations" src="" width="200"/>
+                </header>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Footer -->
+    <footer id="footer">
+      <div class="container">
+        <ul class="icons">
+          <li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+          <li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+          <li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
+          <li><a href="#" class="icon fa-envelope-o"><span class="label">Email</span></a></li>
+        </ul>
+      </div>
+      <div class="copyright">
+        &copy; templatedco. All rights reserved.
+      </div>
+    </footer>
+    <!-- Scripts -->
+    <script src="js/progressbar.min.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery.scrollex.min.js"></script>
+    <script src="js/skel.min.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/main.js"></script>
+  </body>
 </html>
-
 <script type="text/javascript">
-function showHide(obj){ 
+function showHide(obj){
   resume_bars();
-  var curSel=obj.options[obj.selectedIndex].value
-
+  var curSel = obj.options[obj.selectedIndex].value;
   switch(curSel)
   {
     case 'alface':
-    document.getElementById('vegetableInfo').innerHTML = "A alface é uma planta herbácea rica em nutrientes e clorofila. Tem a função de alcalinizar e desintoxicar — principalmente o fígado. Esta hortaliça constitui uma importante fonte de vitaminas (A, C e niacina) e sais minerais (sais de enxofre, fósforo, ferro, cálcio e silício)."; 
-    break;    
-
+      document.getElementById('vegetableInfo').innerHTML = "A alface é uma planta herbácea rica em nutrientes e clorofila. Tem a função de alcalinizar e desintoxicar — principalmente o fígado. Esta hortaliça constitui uma importante fonte de vitaminas (A, C e niacina) e sais minerais (sais de enxofre, fósforo, ferro, cálcio e silício).";
+      $("#recomendations").attr("src", "images/plantas/alface.png");
+      $("#plant").html("Plantio: Abril - Julho");
+      $("#harvest").html("Colheita: Junho - Novembro");
+      break;
     case 'tomate':
-    document.getElementById('vegetableInfo').innerHTML = "O tomate está associado a índices reduzidos de câncer de pâncreas, cervical e próstata. Ele protege o organismo de infecções bacterianas, assim como de perturbações digestivas e pulmonares. Em cataplasmas ou cru, ele age como desinflamatório, sendo também muito benéfico para a atividade cerebral."; 
-    break;
-
+      document.getElementById('vegetableInfo').innerHTML = "O tomate está associado a índices reduzidos de câncer de pâncreas, cervical e próstata. Ele protege o organismo de infecções bacterianas, assim como de perturbações digestivas e pulmonares. Em cataplasmas ou cru, ele age como desinflamatório, sendo também muito benéfico para a atividade cerebral.";
+      $("#recomendations").attr("src", "images/plantas/tomate.png");
+      $("#plant").html("Plantio: Abril - Julho");
+      $("#harvest").html("Colheita: Junho - Novembro");
+      break;
     case 'repolho':
-    document.getElementById('vegetableInfo').innerHTML = " O repolho tem excelentes propriedades curativas da pele. Quando usado como cataplasma, o repolho é eficaz na cura de erupções cutâneas, como eczema, psoríase, acne, erupções cutâneas, mordidas de insetos, úlceras nas pernas e feridas. Ele ajuda a curar a artrite também. Você pode preparar um cataplasma ralando ou processando algum repolho em um liquidificador.";
-    break;
-
+      document.getElementById('vegetableInfo').innerHTML = " O repolho tem excelentes propriedades curativas da pele. Quando usado como cataplasma, o repolho é eficaz na cura de erupções cutâneas, como eczema, psoríase, acne, erupções cutâneas, mordidas de insetos, úlceras nas pernas e feridas. Ele ajuda a curar a artrite também. Você pode preparar um cataplasma ralando ou processando algum repolho em um liquidificador.";
+      $("#recomendations").attr("src", "images/plantas/repolho.png");
+      $("#plant").html("Plantio: Março - Abril");
+      $("#harvest").html("Colheita: Junho - Novembro");
+      break;
     default:
-    document.getElementById('vegetableInfo').innerHTML= "----";
+      document.getElementById('vegetableInfo').innerHTML= "----";
+      $("#recomendations").attr("src", "");
+      $("#plant").html("Plantio: Março - Abril");
+      $("#harvest").html("Colheita: Julho - Outubro");
+    }
   }
-}  
 </script>
 '
