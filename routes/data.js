@@ -25,7 +25,7 @@ router.post('/', function(req, res) {
 router.get('/', function(req, res) {
   data = [];
   db.serialize(function() {
-    db.each("SELECT * FROM data ORDER BY t DESC LIMIT 100", function(err, row) {
+    db.each("SELECT * FROM data ORDER BY t DESC LIMIT 50", function(err, row) {
       //console.log(row);
       data.push({
         'time': row.time,
